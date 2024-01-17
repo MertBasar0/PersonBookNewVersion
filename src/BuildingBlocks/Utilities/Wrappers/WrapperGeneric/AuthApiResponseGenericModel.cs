@@ -41,20 +41,5 @@ namespace Utilities.Wrappers.WrapperGeneric
             
             return new AuthApiResponseGenericModel<T> { ErrorDto = errorDto, HttpStatusCode = statusCode, IsSuccess = false };
         }
-
-        public AuthApiResponseGenericModel() //Buradaki boş constructure'ın kaldırıl kaldırılmayacağına sonra karar verilecek. Kullanım mantığıyla alakalı deneyime ihtiyaç var.
-        {
-            
-        }
-
-        public AuthApiResponseGenericModel(T? data, HttpStatusCode httpStatusCode, ErrorDto? errors)
-        {
-            Data = data;
-            HttpStatusCode = httpStatusCode;
-            Errors = errors;
-
-
-            if(HttpStatusCode != HttpStatusCode.OK) { Success = false; }
-        }
     }
 }
