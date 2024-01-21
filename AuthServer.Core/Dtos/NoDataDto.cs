@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utilities.Models.AuthenticationApi.Register
+namespace AuthServer.Core.Dtos
 {
-    public class AuthApiRegisterResponseModel
+    public class NoDataDto
     {
     }
 }

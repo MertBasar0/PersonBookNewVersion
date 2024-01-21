@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utilities.Dtos
+namespace Utilities.Dto
 {
     public class ErrorDto
     {
-        public List<String> Errors { get; private set; }
+        public List<string> Errors { get; private set; }
 
         public bool IsShow { get; private set; }
 
 
         public ErrorDto()
         {
-            Errors = new List<String>();
+            Errors = new List<string>();
         }
 
         public ErrorDto(string error, bool isShow)

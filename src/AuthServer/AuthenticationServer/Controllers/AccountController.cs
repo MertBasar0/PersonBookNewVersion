@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Utilities.Dtos.AuthenticationApi;
+using Utilities.Wrappers.WrapperGeneric;
 
 namespace AuthenticationServer.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("/api")]
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
-        public IActionResult Index()
+
+        public AuthApiResponseGenericModel<AuthApiLoginRequestDto> Login()
         {
-            return View();
+            return null;
         }
     }
 }

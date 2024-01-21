@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json.Serialization;
-using Utilities.Dtos;
+using Utilities.Dto;
 
 namespace Utilities.Wrappers.WrapperGeneric
 {
@@ -23,7 +23,7 @@ namespace Utilities.Wrappers.WrapperGeneric
         public static AuthApiResponseGenericModel<T> Success(HttpStatusCode statusCode)
         {
             return new AuthApiResponseGenericModel<T> { Data = default, HttpStatusCode = statusCode, IsSuccess = true };
-        }                               
+        }
         
         public static AuthApiResponseGenericModel<T> Fail(ErrorDto errorDto, HttpStatusCode statusCode)
         {

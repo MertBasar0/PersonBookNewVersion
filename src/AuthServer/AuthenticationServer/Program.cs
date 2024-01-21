@@ -1,5 +1,6 @@
 using DataAccess.Concrete.Infrastructure;
 using Entities;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
@@ -8,6 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddCors(x =>
+{
+    x.AddDefaultPolicy(x =>
+    {
+        x.AllowAnyMethod();
+        x.AllowAnyHeader();
+        x.AllowAnyOrigin();
+        x.AllowCredentials();
+    });
+});
 
 builder.Services.AddSqlServer<AuthDbContext>(builder.Configuration.GetConnectionString("sqlContainer"));
 

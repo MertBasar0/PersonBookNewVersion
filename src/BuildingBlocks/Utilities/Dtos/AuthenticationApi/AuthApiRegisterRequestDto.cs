@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utilities.Models.AuthenticationApi.Register
+namespace Utilities.Dtos.AuthenticationApi
 {
-    public class AuthApiRegisterRequestModel
+    public class AuthApiRegisterRequestDto
     {
         public string Username { get; set; }
 
@@ -16,12 +16,12 @@ namespace Utilities.Models.AuthenticationApi.Register
 
         public string Telephone { get; set; }
 
-        public AuthApiRegisterRequestModel()
+        public AuthApiRegisterRequestDto()
         {
 
         }
 
-        public AuthApiRegisterRequestModel(string username, string password, string email, string telephone)
+        public AuthApiRegisterRequestDto(string username, string password, string email, string telephone)
         {
             Username = username;
             Password = password;
