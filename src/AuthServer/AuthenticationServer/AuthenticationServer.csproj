@@ -20,7 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\AuthServer.Core\AuthServer.Core.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\Utilities\Utilities.csproj" />
+    <ProjectReference Include="..\Business\Business.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Entities\Entities.csproj" />
   </ItemGroup>

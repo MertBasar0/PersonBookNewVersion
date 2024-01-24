@@ -1,3 +1,6 @@
+using AuthServer.Core;
+using Business.Abstract;
+using Business.Concrete;
 using DataAccess.Concrete.Infrastructure;
 using Entities;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -10,18 +13,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddCors(x =>
+builder.Services.AddCors(opt => opt.AddPolicy("AuthServerCorsPolicy", pol =>
 {
-    x.AddDefaultPolicy(x =>
-    {
-        x.AllowAnyMethod();
-        x.AllowAnyHeader();
-        x.AllowAnyOrigin();
-        x.AllowCredentials();
-    });
-});
+    pol.AllowAnyHeader();
+    pol.AllowAnyMethod();
+    pol.AllowAnyOrigin();
+}));
 
-builder.Services.AddSqlServer<AuthDbContext>(builder.Configuration.GetConnectionString("sqlContainer"));
+builder.Services.Configure<TokenOption>(builder.Configuration.GetSection("JwtTokenInformation"));
+
+builder.Services.AddSqlServer<AuthDbContext>(builder.Configuration.GetConnectionString("sqlServerLocalhost"));
+
+
 
 builder.Services
     .AddIdentity<AppUser, AppRole>(opt =>
@@ -41,10 +44,14 @@ builder.Services
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
+
+builder.Services.AddTransient<IAccountManager, AccountService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+app.UseCors("AuthServerCorsPolicy");
 
 app.UseAuthorization();
 

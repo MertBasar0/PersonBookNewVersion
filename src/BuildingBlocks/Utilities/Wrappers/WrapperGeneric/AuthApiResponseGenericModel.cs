@@ -12,7 +12,6 @@ namespace Utilities.Wrappers.WrapperGeneric
 
         public ErrorDto? ErrorDto { get; private set; }
 
-        [JsonIgnore]
         public bool IsSuccess { get; private set; }
 
         public static AuthApiResponseGenericModel<T> Success(T data, HttpStatusCode statusCode)
@@ -37,7 +36,7 @@ namespace Utilities.Wrappers.WrapperGeneric
 
         public static AuthApiResponseGenericModel<T> Fail(string errorMessage, HttpStatusCode statusCode, bool isShow)
         {
-            var errorDto = new ErrorDto(errorMessage, isShow);
+            var errorDto = ErrorDto.Create(errorMessage, isShow);
             
             return new AuthApiResponseGenericModel<T> { ErrorDto = errorDto, HttpStatusCode = statusCode, IsSuccess = false };
         }

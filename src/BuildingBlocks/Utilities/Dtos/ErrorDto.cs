@@ -18,16 +18,22 @@ namespace Utilities.Dto
             Errors = new List<string>();
         }
 
-        public ErrorDto(string error, bool isShow)
+        public static ErrorDto Create(string error, bool isShow)
         {
-            Errors.Add(error);
-            IsShow = isShow;
+            return new ErrorDto()
+            {
+                Errors = new List<string> { error },
+                IsShow = isShow
+            };
         }
 
-        public ErrorDto(List<string> errors, bool isShow)
+        public static ErrorDto Create(List<string>errors, bool isShow)
         {
-            Errors = errors;
-            IsShow = isShow;
+            return new ErrorDto()
+            {
+                Errors = errors,
+                IsShow = isShow
+            };
         }
     }
 }
