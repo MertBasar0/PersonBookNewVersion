@@ -22,7 +22,7 @@ builder.Services.AddCors(opt => opt.AddPolicy("AuthServerCorsPolicy", pol =>
 
 builder.Services.Configure<TokenOption>(builder.Configuration.GetSection("JwtTokenInformation"));
 
-builder.Services.AddSqlServer<AuthDbContext>(builder.Configuration.GetConnectionString("sqlServerLocalhost"));
+builder.Services.AddSqlServer<AuthDbContext>(builder.Configuration.GetConnectionString("sqlContainer"));
 
 
 

@@ -8,7 +8,7 @@ using Utilities.Wrappers.WrapperGeneric;
 
 namespace AuthenticationServer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace AuthenticationServer.Controllers
         }
 
         [HttpPost]
-        [Route("Login")]
+        [Route("[action]")]
         public async Task<AuthApiResponseGenericModel<JwtTokenDto>> Login([FromBody]AuthApiLoginRequestDto authApiLoginRequestDto)
         {
             return await _accountService.LoginAsync(authApiLoginRequestDto);
