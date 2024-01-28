@@ -21,7 +21,7 @@
             z-index: 1;
             background: #FFFFFF;
             max-width: 360px;
-            margin-top:70%;
+            margin-top: 70%;
             /* margin: 0 auto 100px; */
             padding: 45px;
             text-align: center;
@@ -155,28 +155,23 @@
         var loginButton = document.getElementById('loginButton');
         loginButton.addEventListener('click', () => {
 
-        var d = {
-            "Mail": document.getElementById('mail').value,
-            "Password": document.getElementById('password').value
-        }
+            var d = {
+                "Mail": document.getElementById('mail').value,
+                "Password": document.getElementById('password').value
+            }
 
-        @* var fd = new FormData();
-        fd.append('Mail', document.getElementById('mail').value);
-        fd.append('Password', document.getElementById('password').value);
-
-        console.log(fd); *@
-        fetch("Login/Login",{
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(d)
-        })
+            fetch("Account/Login", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(d)
+            })
             .then(success => console.log(success.json()));
-            
+
         });
 
-        
+
 
 
     </script>

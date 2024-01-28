@@ -14,19 +14,16 @@ namespace Utilities.Dtos.AuthenticationApi
 
         public string Email { get; set; }
 
-        public string Telephone { get; set; }
-
         public AuthApiRegisterRequestDto()
         {
 
         }
 
-        public AuthApiRegisterRequestDto(string username, string password, string email, string telephone)
+        public AuthApiRegisterRequestDto(string username, string password, string email)
         {
             Username = username;
             Password = password;
             Email = email;
-            Telephone = telephone;
         }
     }
 }

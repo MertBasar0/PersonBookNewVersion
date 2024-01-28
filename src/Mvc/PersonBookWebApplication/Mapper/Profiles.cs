@@ -9,6 +9,7 @@ namespace PersonBookWebApplication.Mapper
         public Profiles()
         {
             CreateMap<LoginViewModel, AuthApiLoginRequestDto>();
+            CreateMap<RegisterViewModel, AuthApiRegisterRequestDto>();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using AuthServer.Core.Dtos;
-using Business.Abstract;
+﻿using Business.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Utilities.Dtos;
@@ -35,8 +34,7 @@ namespace AuthenticationServer.Controllers
         [HttpPost("Register")]
         public async Task<AuthApiResponseGenericModel<NoDataDto>> Register(AuthApiRegisterRequestDto authApiRegisterRequestDto)
         {
-            //return await _accountService.Register(authApiRegisterRequestDto);
-            return null;
+            return await _accountService.RegisterAsync(authApiRegisterRequestDto);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using AuthServer.Core.Dtos;
 using Business.Abstract;
 using Entities;
 using Microsoft.AspNetCore.Identity;
@@ -70,7 +69,6 @@ namespace Business.Concrete
         public async Task<AuthApiResponseGenericModel<NoDataDto>> RegisterAsync(AuthApiRegisterRequestDto authApiRegisterRequestDto)
         {
             var user = AppUser.CreateUser(authApiRegisterRequestDto.Username, authApiRegisterRequestDto.Email);
-            user.PhoneNumber = authApiRegisterRequestDto.Telephone;
             IdentityResult result = await _userManager.CreateAsync(user, authApiRegisterRequestDto.Password);
             if (result.Succeeded)
                 return AuthApiResponseGenericModel<NoDataDto>.Success(new NoDataDto(), System.Net.HttpStatusCode.OK);
