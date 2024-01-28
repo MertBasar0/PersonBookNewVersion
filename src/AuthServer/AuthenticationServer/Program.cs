@@ -24,8 +24,6 @@ builder.Services.Configure<TokenOption>(builder.Configuration.GetSection("JwtTok
 
 builder.Services.AddSqlServer<AuthDbContext>(builder.Configuration.GetConnectionString("sqlContainer"));
 
-
-
 builder.Services
     .AddIdentity<AppUser, AppRole>(opt =>
     {
@@ -39,7 +37,7 @@ builder.Services
         opt.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
         opt.ClaimsIdentity.EmailClaimType = ClaimTypes.Email;
         opt.Lockout.MaxFailedAccessAttempts = 5;
-        opt.SignIn.RequireConfirmedEmail = true;
+        //opt.SignIn.RequireConfirmedEmail = true;
     })
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();

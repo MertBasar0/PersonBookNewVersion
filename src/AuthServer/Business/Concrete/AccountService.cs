@@ -38,10 +38,10 @@ namespace Business.Concrete
 
             if(user != null)
             {
-                var canSignIn = await _signInManager.CanSignInAsync(user);
+                //var canSignIn = await _signInManager.CanSignInAsync(user);
 
-                if (canSignIn)
-                {
+                //if (canSignIn)
+                //{
                     if(await _userManager.CheckPasswordAsync(user, authApiLoginRequestDto.Password))
                     {
                         var claims = await _userManager.GetClaimsAsync(user);
@@ -57,11 +57,11 @@ namespace Business.Concrete
 
                         JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
 
-                        String token = jwtSecurityTokenHandler.WriteToken(securityToken);
+                        string token = jwtSecurityTokenHandler.WriteToken(securityToken);
 
                         return AuthApiResponseGenericModel<JwtTokenDto>.Success(new JwtTokenDto(token, DateTime.UtcNow.AddDays(1).ToString()), System.Net.HttpStatusCode.OK);
                     }
-                }
+                //}
             }
             return AuthApiResponseGenericModel<JwtTokenDto>.Fail(ErrorDto.Create("Giriş işlemi başarısız", true), System.Net.HttpStatusCode.Unauthorized);
         }
@@ -69,7 +69,24 @@ namespace Business.Concrete
         public async Task<AuthApiResponseGenericModel<NoDataDto>> RegisterAsync(AuthApiRegisterRequestDto authApiRegisterRequestDto)
         {
             var user = AppUser.CreateUser(authApiRegisterRequestDto.Username, authApiRegisterRequestDto.Email);
-            IdentityResult result = await _userManager.CreateAsync(user, authApiRegisterRequestDto.Password);
+            IdentityResult result = null;
+            try
+            {
+                result = await _userManager.CreateAsync(user, authApiRegisterRequestDto.Password);
+
+                var createdUser = await _userManager.FindByEmailAsync(authApiRegisterRequestDto.Email);
+
+                if (createdUser != null)
+                {
+                    await _userManager.AddClaimsAsync(createdUser, new List<Claim>() { new Claim(ClaimTypes.Name, authApiRegisterRequestDto.Username), new Claim(ClaimTypes.Email, authApiRegisterRequestDto.Email), new Claim(ClaimTypes.Role, "admin")} );
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             if (result.Succeeded)
                 return AuthApiResponseGenericModel<NoDataDto>.Success(new NoDataDto(), System.Net.HttpStatusCode.OK);
             else

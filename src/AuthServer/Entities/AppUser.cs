@@ -14,9 +14,9 @@ namespace Entities
 
         public DateTime? createTime { get => _createTime; set => _createTime = value; }
 
-        public DateTime? deleteTime { get; set; }
+        public DateTime? deleteTime { get; set; } = null;
 
-        public DateTime? updateTime { get; set; }
+        public DateTime? updateTime { get; set; } = null;
 
         private UserStatus? _status = UserStatus.Active;
 
@@ -39,7 +39,7 @@ namespace Entities
 
         public static AppUser CreateUser(string userName, string mail)
         {
-            return new AppUser(status: UserStatus.Active) 
+            return new AppUser() 
             {
                 UserName = userName,
                 Email = mail
