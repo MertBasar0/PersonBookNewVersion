@@ -130,15 +130,15 @@
 <div class="login-page">
     <div class="form">
         <form class="register-form">
-            <input type="text" placeholder="isim" />
-            <input type="password" placeholder="şifre" />
-            <input type="text" placeholder="mail" />
-            <button>Kayıt Ol</button>
+            <input type="text" id="registerUserName" placeholder="isim" />
+            <input type="password" id="registerPassword" placeholder="şifre" />
+            <input type="text" id="registerMail" placeholder="mail" />
+            <button type="button" id="registerButton">Kayıt Ol</button>
             <p class="message">Kayıtlı mısın ? <a href="#">Giriş Yap</a></p>
         </form>
         <form class="login-form">
-            <input type="text" id="mail" asp-for="Mail" placeholder="mail" />
-            <input type="password" id="password" asp-for="Password" placeholder="şifre" />
+            <input type="text" id="loginMail" asp-for="Mail" placeholder="mail" />
+            <input type="password" id="loginPassword" asp-for="Password" placeholder="şifre" />
             <button type="button" id="loginButton">login</button>
             <p class="message">Kayıt mı olacaksın ? <a href="#">Kayıt Ol</a></p>
         </form>
@@ -155,9 +155,9 @@
         var loginButton = document.getElementById('loginButton');
         loginButton.addEventListener('click', () => {
 
-            var d = {
-                "Mail": document.getElementById('mail').value,
-                "Password": document.getElementById('password').value
+            var loginInputs = {
+                "Mail": document.getElementById('loginMail').value,
+                "Password": document.getElementById('loginPassword').value
             }
 
             fetch("Account/Login", {
@@ -165,10 +165,30 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(d)
+                body: JSON.stringify(loginInputs)
             })
             .then(success => console.log(success.json()));
 
+        });
+
+        var registerButton = document.getElementById('registerButton');
+
+        registerButton.addEventListener('click', () => {
+
+            var registerInputs = {
+                "UserName": document.getElementById('registerUserName').value,
+                "Password": document.getElementById('registerPassword').value,
+                "Email": document.getElementById('registerMail').value
+            }
+            
+            fetch("Account/Register", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(registerInputs)
+            })
+            .then(success => console.log(success.json()));
         });
 
 

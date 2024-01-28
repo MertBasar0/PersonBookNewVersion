@@ -7,7 +7,7 @@ using Utilities.Wrappers.WrapperGeneric;
 
 namespace AuthenticationServer.Controllers
 {
-    [Route("api/[controller]/")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -25,13 +25,13 @@ namespace AuthenticationServer.Controllers
         }
 
         [HttpPost]
-        [Route("[action]")]
+        //[Route("[action]")]
         public async Task<AuthApiResponseGenericModel<JwtTokenDto>> Login([FromBody]AuthApiLoginRequestDto authApiLoginRequestDto)
         {
             return await _accountService.LoginAsync(authApiLoginRequestDto);
         }
 
-        [HttpPost("Register")]
+        [HttpPost]
         public async Task<AuthApiResponseGenericModel<NoDataDto>> Register(AuthApiRegisterRequestDto authApiRegisterRequestDto)
         {
             return await _accountService.RegisterAsync(authApiRegisterRequestDto);

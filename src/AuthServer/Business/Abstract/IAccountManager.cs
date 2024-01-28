@@ -1,5 +1,4 @@
-﻿using AuthServer.Core.Dtos;
-using Utilities.Dtos;
+﻿using Utilities.Dtos;
 using Utilities.Dtos.AuthenticationApi;
 using Utilities.Wrappers.WrapperGeneric;
 

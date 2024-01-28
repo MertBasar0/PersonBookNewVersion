@@ -71,12 +71,10 @@ namespace PersonBookWebApplication.Controllers
                 if(readedResponse == null || readedResponse.IsSuccess)
                 {
                     TempData["badRequestMessage"] = "Kayıt işlemi gerçekleştirilememiştir.";
-                    return View("Index");
                 }
                 TempData["successMessage"] = "Kayıt işlemi başarıyla gerçekleştirildi";
-                return View("Index");
             }
-
+            return View("Index");
             //Buradan devam edilecek.
         }
     }
