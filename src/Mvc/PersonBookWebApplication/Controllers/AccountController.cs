@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using PersonBookWebApplication.Consts;
 using PersonBookWebApplication.Models;
 using System.Text;
+using System.Text.Json;
 using Utilities.Dtos;
 using Utilities.Dtos.AuthenticationApi;
 using Utilities.Wrappers.WrapperGeneric;
@@ -43,13 +44,18 @@ namespace PersonBookWebApplication.Controllers
 
             if (requestResponse.IsSuccessStatusCode)
             {
-                var readedResponse = await requestResponse.Content.ReadFromJsonAsync<AuthApiResponseGenericModel<JwtTokenDto>>();
-                if (readedResponse == null || !readedResponse.IsSuccess)
-                {
-                    TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
-                    return View("Index");
-                }
-                HttpContext.Session.Set("session", Encoding.UTF8.GetBytes(readedResponse.Data.AccessToken));
+                var readedResponse = await requestResponse.Content.ReadAsStringAsync();
+
+                //var serializedResponse = JsonConvert.SerializeObject(readedResponse);
+
+                var castedResponse = JsonConvert.DeserializeObject<AuthApiResponseGenericModel<JwtTokenDto>>(readedResponse); // Buradan devam edilecek
+
+                //if (readedResponse == null || !readedResponse.IsSuccess)
+                //{
+                //    TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
+                //    return View("Index");
+                //}
+                //HttpContext.Session.Set("session", Encoding.UTF8.GetBytes(readedResponse.Data.AccessToken));
                 return RedirectToAction("Index", "Person", new {area = "Main"});
             }
             return View("Index");

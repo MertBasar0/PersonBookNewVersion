@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using Utilities.Dtos;
 using Utilities.Dtos.AuthenticationApi;
 using Utilities.Wrappers.WrapperGeneric;
@@ -26,9 +28,11 @@ namespace AuthenticationServer.Controllers
 
         [HttpPost]
         //[Route("[action]")]
-        public async Task<AuthApiResponseGenericModel<JwtTokenDto>> Login([FromBody]AuthApiLoginRequestDto authApiLoginRequestDto)
+        public async Task<String> Login([FromBody]AuthApiLoginRequestDto authApiLoginRequestDto)
         {
-            return await _accountService.LoginAsync(authApiLoginRequestDto);
+            var response = await _accountService.LoginAsync(authApiLoginRequestDto);
+            var authServerResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings() { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+            return authServerResponse;
         }
 
         [HttpPost]

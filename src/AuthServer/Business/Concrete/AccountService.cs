@@ -52,14 +52,24 @@ namespace Business.Concrete
                             claims: claims,
                             notBefore: DateTime.UtcNow,
                             expires: DateTime.UtcNow.AddDays(1),
-                            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey)), HashAlgorithmType.Sha256.ToString())
+                            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey)), SecurityAlgorithms.HmacSha256)
                             );
 
                         JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
 
+                    try
+                    {
                         string token = jwtSecurityTokenHandler.WriteToken(securityToken);
-
                         return AuthApiResponseGenericModel<JwtTokenDto>.Success(new JwtTokenDto(token, DateTime.UtcNow.AddDays(1).ToString()), System.Net.HttpStatusCode.OK);
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
+
+                        
                     }
                 //}
             }
