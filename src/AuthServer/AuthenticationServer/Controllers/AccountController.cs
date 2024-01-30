@@ -27,12 +27,11 @@ namespace AuthenticationServer.Controllers
         }
 
         [HttpPost]
-        //[Route("[action]")]
-        public async Task<String> Login([FromBody]AuthApiLoginRequestDto authApiLoginRequestDto)
+        public async Task<AuthApiResponseGenericModel<JwtTokenDto>> Login([FromBody]AuthApiLoginRequestDto authApiLoginRequestDto)
         {
             var response = await _accountService.LoginAsync(authApiLoginRequestDto);
-            var authServerResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings() { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
-            return authServerResponse;
+            //var authServerResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings() { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            return response;
         }
 
         [HttpPost]

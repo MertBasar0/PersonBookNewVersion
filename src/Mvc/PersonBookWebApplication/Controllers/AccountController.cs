@@ -39,26 +39,33 @@ namespace PersonBookWebApplication.Controllers
                 return View("Index", loginModel);
             }
             var loginDto = _mapper.Map<AuthApiLoginRequestDto>(loginModel);
-
-            var requestResponse = await _AuthenticationServerClient.PostAsJsonAsync(ClientConsts.AuthenticationServerLogin, loginDto);
-
-            if (requestResponse.IsSuccessStatusCode)
+            try
             {
-                var readedResponse = await requestResponse.Content.ReadAsStringAsync();
+                var requestResponse = await _AuthenticationServerClient.PostAsJsonAsync<AuthApiLoginRequestDto>(ClientConsts.AuthenticationServerLogin, loginDto);
+                if (requestResponse.IsSuccessStatusCode)
+                {
+                    var readedResponse = await requestResponse.Content.ReadAsStringAsync();
 
-                //var serializedResponse = JsonConvert.SerializeObject(readedResponse);
+                    //var serializedResponse = JsonConvert.SerializeObject(readedResponse);
 
-                var castedResponse = JsonConvert.DeserializeObject<AuthApiResponseGenericModel<JwtTokenDto>>(readedResponse); // Buradan devam edilecek
+                    var castedResponse = JsonConvert.DeserializeObject(readedResponse, typeof(AuthApiResponseGenericModel<JwtTokenDto>)); 
 
-                //if (readedResponse == null || !readedResponse.IsSuccess)
-                //{
-                //    TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
-                //    return View("Index");
-                //}
-                //HttpContext.Session.Set("session", Encoding.UTF8.GetBytes(readedResponse.Data.AccessToken));
-                return RedirectToAction("Index", "Person", new {area = "Main"});
+                    //if (readedResponse == null || !readedResponse.IsSuccess)
+                    //{
+                    //    TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
+                    //    return View("Index");
+                    //}
+                    //HttpContext.Session.Set("session", Encoding.UTF8.GetBytes(readedResponse.Data.AccessToken));
+                    return RedirectToAction("Index", "Person", new { area = "Main" });
+                }
+                return View("Index");
             }
-            return View("Index");
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         [HttpPost]

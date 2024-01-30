@@ -6,13 +6,13 @@ namespace Utilities.Wrappers.WrapperGeneric
 {
     public class AuthApiResponseGenericModel<T> where T : class  
     {
-        public T? Data { get; private set; }
+        public T? Data { get; set; } = null;
 
-        public HttpStatusCode HttpStatusCode { get; private set; }
+        public HttpStatusCode HttpStatusCode { get; set; }
 
-        public ErrorDto? ErrorDto { get; private set; }
+        public ErrorDto? ErrorDto { get; set; }  = null;
 
-        public bool IsSuccess { get; private set; }
+        public bool IsSuccess { get; set; } = false;
 
         public static AuthApiResponseGenericModel<T> Success(T data, HttpStatusCode statusCode)
         {
