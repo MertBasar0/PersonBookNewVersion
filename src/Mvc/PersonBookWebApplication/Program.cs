@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -37,28 +38,12 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromDays(1);
 });
 
-builder.Services.AddAuthentication(option =>
+builder.Services.AddCors(x => x.AddPolicy("example", x =>
 {
-    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
-{
-    var tokenOpt = builder.Configuration.GetSection("JwtTokenInformation").Get<CommonTokenOption>();
-    option.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidIssuer = tokenOpt.Issuer,
-        ValidAudience = tokenOpt.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOpt.SecurityKey)),
-        ClockSkew = TimeSpan.Zero,
-        
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true
-    };
-});
+    x.AllowAnyMethod();
+    x.AllowAnyOrigin();
+    x.AllowAnyHeader();
+}));
 
 builder.Services.AddAuthorization(auth =>
 {
@@ -67,6 +52,45 @@ builder.Services.AddAuthorization(auth =>
         role.RequireClaim(ClaimTypes.Role, "admin");
     });
 });
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
+})
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+{
+    var tokenOptions = builder.Configuration.GetSection("JwtTokenInformation").Get<CommonTokenOption>();
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = tokenOptions.Issuer,
+        ValidAudience = tokenOptions.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey)), //Token için bir key identifier bulunmama hatasý geliyor. Buradan devam edilecek.
+        ClockSkew = TimeSpan.Zero,
+
+
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            throw new Exception(context.Exception.Message);
+        }
+        //OnTokenValidated = context =>
+        //{
+        //    context.HttpContext.User
+        //}
+
+    };
+});
+
+
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -79,17 +103,15 @@ builder.Services.AddHttpClient(ClientConsts.AuthenticationServerName, x =>
 
 var app = builder.Build();
 
-
 app.UseSession();
-
-
-app.UseRouting();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseCors("example");
 
 app.UseStaticFiles();
 
@@ -105,20 +127,20 @@ app.Use(async (context, next) =>
     await next();
 });
 
-
+app.UseRouting();
 app.UseAuthentication();
-
 app.UseAuthorization();
-
-app.UseEndpoints(endpoints =>
+app.UseEndpoints(endpoint =>
 {
-    endpoints.MapAreaControllerRoute(
-        name: "Person",
-        areaName: "Main",
-        pattern:"Person/{controller=Person}/{action=Index}/"
+
+    endpoint.MapAreaControllerRoute(
+    name: "Main",
+    areaName: "Main",
+    pattern: "MainArea/{controller=Person}/{action=Index}/{id?}"
     );
 
-    endpoints.MapControllerRoute(
+
+    endpoint.MapControllerRoute(
         name: "default",
         pattern: "{controller=Account}/{action=Index}/{id?}"
     );

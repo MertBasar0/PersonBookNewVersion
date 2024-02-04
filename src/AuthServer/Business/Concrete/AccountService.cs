@@ -55,20 +55,8 @@ namespace Business.Concrete
                             );
 
                         JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
-
-                    try
-                    {
                         string token = jwtSecurityTokenHandler.WriteToken(securityToken);
                         return AuthApiResponseGenericModel<JwtTokenDto>.Success(new JwtTokenDto(token, DateTime.UtcNow.AddDays(1).ToString()), System.Net.HttpStatusCode.OK);
-                    }
-                    catch (Exception)
-                    {
-
-                        throw;
-                    }
-
-
-                        
                     }
                 //}
             }

@@ -55,7 +55,7 @@ namespace PersonBookWebApplication.Controllers
                     }
                     HttpContext.Session.Set("session", Encoding.UTF8.GetBytes(deserializedResponse.Data.AccessToken));
 
-                    return RedirectToAction("index","person", new {area = "Main"});
+                    return RedirectToAction("index", "person", new { area = "Main" });
                 }
                 return View("Index");
             }

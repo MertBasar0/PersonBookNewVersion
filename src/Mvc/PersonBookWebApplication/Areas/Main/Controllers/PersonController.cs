@@ -9,6 +9,7 @@ namespace PersonBookWebApplication.Areas.Main.Controllers
     public class PersonController : Controller
     {
         [HttpGet]
+        [Route("Main/[controller]/[action]", Name = "apolet")]
         public IActionResult Index()
         {
             return View();
