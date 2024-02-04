@@ -50,7 +50,6 @@ namespace Business.Concrete
                             issuer: _tokenOptions.Issuer,
                             audience: _tokenOptions.Audience,
                             claims: claims,
-                            notBefore: DateTime.UtcNow,
                             expires: DateTime.UtcNow.AddDays(1),
                             signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey)), SecurityAlgorithms.HmacSha256)
                             );

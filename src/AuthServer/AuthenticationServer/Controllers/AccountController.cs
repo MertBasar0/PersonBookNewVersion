@@ -30,7 +30,6 @@ namespace AuthenticationServer.Controllers
         public async Task<AuthApiResponseGenericModel<JwtTokenDto>> Login([FromBody]AuthApiLoginRequestDto authApiLoginRequestDto)
         {
             var response = await _accountService.LoginAsync(authApiLoginRequestDto);
-            //var authServerResponse = JsonConvert.SerializeObject(response, new JsonSerializerSettings() { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
             return response;
         }
 

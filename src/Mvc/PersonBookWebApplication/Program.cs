@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using PersonBookWebApplication.Consts;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using Utilities;
 using static System.Net.WebRequestMethods;
@@ -11,7 +15,27 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddSession();
+
+
+builder.Services.AddMvc(x =>
+{
+    x.EnableEndpointRouting = true;
+})
+.AddRazorOptions(option =>
+{
+    option.AreaViewLocationFormats.Clear();
+    option.AreaViewLocationFormats.Add("/Areas/{2}/Views/{1}/{0}.cshtml");
+    option.AreaViewLocationFormats.Add("/Areas/{2}/Views/Shared/{0}.cshtml");
+    option.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+});
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.IdleTimeout = TimeSpan.FromDays(1);
+});
 
 builder.Services.AddAuthentication(option =>
 {
@@ -19,18 +43,30 @@ builder.Services.AddAuthentication(option =>
     option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(option =>
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
+{
+    var tokenOpt = builder.Configuration.GetSection("JwtTokenInformation").Get<CommonTokenOption>();
+    option.TokenValidationParameters = new TokenValidationParameters()
     {
-        var tokenOpt = builder.Configuration.GetSection("JwtTokenInformation").Get<CommonTokenOption>();
-        option.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidIssuer = tokenOpt.Issuer,
-            ValidAudience = tokenOpt.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOpt.SecurityKey))
-        };
-    });
+        ValidIssuer = tokenOpt.Issuer,
+        ValidAudience = tokenOpt.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOpt.SecurityKey)),
+        ClockSkew = TimeSpan.Zero,
+        
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
+});
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization(auth =>
+{
+    auth.AddPolicy("admin", role =>
+    {
+        role.RequireClaim(ClaimTypes.Role, "admin");
+    });
+});
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -41,9 +77,13 @@ builder.Services.AddHttpClient(ClientConsts.AuthenticationServerName, x =>
     x.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
-
-
 var app = builder.Build();
+
+
+app.UseSession();
+
+
+app.UseRouting();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -51,23 +91,20 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 
-app.UseSession();
-
 app.UseStaticFiles();
 
 app.Use(async (context, next) =>
 {
-    var authHeader = context.Request.Headers.Authorization;
-    if(authHeader == 0)
+    var authHeader = context.Request.Headers["Authorization"];
+    if(authHeader.Count == 0)
     {
         context.Session.TryGetValue("session", out var token);
-        if(token != null)
-            context.Request.Headers.Authorization = "Bearer" + Encoding.UTF8.GetString(token);
+        if (token != null)
+            context.Request.Headers["Authorization"] = JwtBearerDefaults.AuthenticationScheme + " " + Encoding.UTF8.GetString(token);
     }
     await next();
 });
 
-app.UseRouting();
 
 app.UseAuthentication();
 
@@ -75,16 +112,16 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapAreaControllerRoute(
+        name: "Person",
+        areaName: "Main",
+        pattern:"Person/{controller=Person}/{action=Index}/"
+    );
+
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Account}/{action=Index}/{id?}"
-        );
-
-    endpoints.MapAreaControllerRoute(
-        name: "Main",
-        areaName: "Main",
-        pattern:"Main/{controller=Person}/{action=Index}"
-        );
+    );
 });
 
 app.Run();

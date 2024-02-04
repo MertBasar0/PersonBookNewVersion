@@ -46,23 +46,21 @@ namespace PersonBookWebApplication.Controllers
                 {
                     var readedResponse = await requestResponse.Content.ReadAsStringAsync();
 
-                    //var serializedResponse = JsonConvert.SerializeObject(readedResponse);
+                    AuthApiResponseGenericModel<JwtTokenDto> deserializedResponse = JsonConvert.DeserializeObject<AuthApiResponseGenericModel<JwtTokenDto>>(readedResponse);
 
-                    var castedResponse = JsonConvert.DeserializeObject(readedResponse, typeof(AuthApiResponseGenericModel<JwtTokenDto>)); 
+                    if (deserializedResponse == null || !deserializedResponse.IsSuccess)
+                    {
+                        TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
+                        return View("Index");
+                    }
+                    HttpContext.Session.Set("session", Encoding.UTF8.GetBytes(deserializedResponse.Data.AccessToken));
 
-                    //if (readedResponse == null || !readedResponse.IsSuccess)
-                    //{
-                    //    TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
-                    //    return View("Index");
-                    //}
-                    //HttpContext.Session.Set("session", Encoding.UTF8.GetBytes(readedResponse.Data.AccessToken));
-                    return RedirectToAction("Index", "Person", new { area = "Main" });
+                    return RedirectToAction("index","person", new {area = "Main"});
                 }
                 return View("Index");
             }
             catch (Exception)
             {
-
                 throw;
             }
 
