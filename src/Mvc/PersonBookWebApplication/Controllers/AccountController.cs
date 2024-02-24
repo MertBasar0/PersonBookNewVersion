@@ -44,20 +44,17 @@ namespace PersonBookWebApplication.Controllers
                 var requestResponse = await _AuthenticationServerClient.PostAsJsonAsync<AuthApiLoginRequestDto>(ClientConsts.AuthenticationServerLogin, loginDto);
                 if (requestResponse.IsSuccessStatusCode)
                 {
-                    var readedResponse = await requestResponse.Content.ReadAsStringAsync();
-
-                    AuthApiResponseGenericModel<JwtTokenDto> deserializedResponse = JsonConvert.DeserializeObject<AuthApiResponseGenericModel<JwtTokenDto>>(readedResponse);
-
-                    if (deserializedResponse == null || !deserializedResponse.IsSuccess)
+                    var readedResponse = await requestResponse.Content.ReadFromJsonAsync<AuthApiResponseGenericModel<JwtTokenDto>>();
+                    //AuthApiResponseGenericModel<JwtTokenDto> deserializedResponse = JsonConvert.DeserializeObject<AuthApiResponseGenericModel<JwtTokenDto>>(readedResponse);
+                    if (readedResponse == null || !readedResponse.IsSuccess)
                     {
                         TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
                         return View("Index");
                     }
-                    HttpContext.Session.Set("session", Encoding.UTF8.GetBytes(deserializedResponse.Data.AccessToken));
-
-                    return RedirectToAction("index","person", new {area = "Main"});
+                    var securityKeyByteArray = Encoding.UTF8.GetBytes(readedResponse.Data?.AccessToken);
+                    HttpContext.Session.Set("session", securityKeyByteArray);
                 }
-                return View("Index");
+                return RedirectToAction("Index", "Person", new { area = "Main" });
             }
             catch (Exception)
             {
@@ -79,14 +76,14 @@ namespace PersonBookWebApplication.Controllers
             {
                 AuthApiResponseGenericModel<NoDataDto>? readedResponse = await requestResponse.Content?.ReadFromJsonAsync<AuthApiResponseGenericModel<NoDataDto>>();
 
-                if(readedResponse == null || readedResponse.IsSuccess)
+                if(readedResponse == null || !readedResponse.IsSuccess)
                 {
                     TempData["badRequestMessage"] = "Kayıt işlemi gerçekleştirilememiştir.";
+                    return View("Index");
                 }
                 TempData["successMessage"] = "Kayıt işlemi başarıyla gerçekleştirildi";
             }
             return View("Index");
-            //Buradan devam edilecek.
         }
     }
 }

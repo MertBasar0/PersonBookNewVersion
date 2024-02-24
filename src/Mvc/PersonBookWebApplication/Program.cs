@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddMvc(x =>
 {
@@ -37,6 +37,12 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromDays(1);
 });
 
+var tokenOpt = builder.Configuration.GetSection("JwtTokenInformation").Get<CommonTokenOption>();
+
+var s = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOpt.SecurityKey));
+
+var c = tokenOpt;
+
 builder.Services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -45,11 +51,10 @@ builder.Services.AddAuthentication(option =>
 })
 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
 {
-    var tokenOpt = builder.Configuration.GetSection("JwtTokenInformation").Get<CommonTokenOption>();
     option.TokenValidationParameters = new TokenValidationParameters()
     {
         ValidIssuer = tokenOpt.Issuer,
-        ValidAudience = tokenOpt.Audience,
+        ValidAudience = tokenOpt.Audiances,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOpt.SecurityKey)),
         ClockSkew = TimeSpan.Zero,
         
@@ -64,7 +69,7 @@ builder.Services.AddAuthorization(auth =>
 {
     auth.AddPolicy("admin", role =>
     {
-        role.RequireClaim(ClaimTypes.Role, "admin");
+        role.RequireUserName("Mert");
     });
 });
 
@@ -83,8 +88,6 @@ var app = builder.Build();
 app.UseSession();
 
 
-app.UseRouting();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -95,16 +98,23 @@ app.UseStaticFiles();
 
 app.Use(async (context, next) =>
 {
+    
     var authHeader = context.Request.Headers["Authorization"];
-    if(authHeader.Count == 0)
+    if (authHeader.Count == 0)
     {
         context.Session.TryGetValue("session", out var token);
         if (token != null)
-            context.Request.Headers["Authorization"] = JwtBearerDefaults.AuthenticationScheme + " " + Encoding.UTF8.GetString(token);
+        {
+            string tokenString = Encoding.UTF8.GetString(token);
+            context.Request.Headers["Authorization"] = "Bearer " + tokenString;
+
+            var s = context.Request.Headers.Authorization;
+        }
     }
     await next();
 });
 
+app.UseRouting();
 
 app.UseAuthentication();
 
@@ -112,16 +122,17 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapAreaControllerRoute(
-        name: "Person",
-        areaName: "Main",
-        pattern:"Person/{controller=Person}/{action=Index}/"
-    );
-
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Account}/{action=Index}/{id?}"
     );
+
+    endpoints.MapAreaControllerRoute(
+        name: "Main",
+        areaName: "Main",
+        pattern: "Per/{controller=Person}/{action=Index}"
+    );
+
 });
 
 app.Run();

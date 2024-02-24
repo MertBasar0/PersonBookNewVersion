@@ -35,8 +35,8 @@ namespace Business.Concrete
         public async Task<AuthApiResponseGenericModel<JwtTokenDto>> LoginAsync(AuthApiLoginRequestDto authApiLoginRequestDto)
         {
             AppUser user = await  _userManager.FindByEmailAsync(authApiLoginRequestDto.Mail);
-
-            if(user != null)
+            byte[] securityKey = Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey);
+            if (user != null)
             {
                 //var canSignIn = await _signInManager.CanSignInAsync(user);
 
@@ -50,8 +50,9 @@ namespace Business.Concrete
                             issuer: _tokenOptions.Issuer,
                             audience: _tokenOptions.Audience,
                             claims: claims,
-                            expires: DateTime.UtcNow.AddDays(1),
-                            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey)), SecurityAlgorithms.HmacSha256)
+                            
+                            expires: DateTime.Now.AddDays(1),
+                            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(securityKey), SecurityAlgorithms.HmacSha256)
                             );
 
                         JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
@@ -89,7 +90,6 @@ namespace Business.Concrete
                 {
                     await _userManager.AddClaimsAsync(createdUser, new List<Claim>() { new Claim(ClaimTypes.Name, authApiRegisterRequestDto.Username), new Claim(ClaimTypes.Email, authApiRegisterRequestDto.Email), new Claim(ClaimTypes.Role, "admin")} );
                 }
-
             }
             catch (Exception)
             {

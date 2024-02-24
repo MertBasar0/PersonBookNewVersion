@@ -10,7 +10,7 @@ namespace Utilities
     {
         public String Issuer { get; set; }
 
-        public String Audience { get; set; }
+        public String Audiances { get; set; }
 
         public String SecurityKey { get; set; }
     }
