@@ -6,6 +6,7 @@ using Entities;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,7 @@ builder.Services.AddCors(opt => opt.AddPolicy("AuthServerCorsPolicy", pol =>
     pol.AllowAnyOrigin();
 }));
 
-builder.Services.Configure<TokenOption>(builder.Configuration.GetSection("JwtTokenInformation"));
+builder.Services.Configure<CommonTokenOption>(builder.Configuration.GetSection("JwtTokenInformation"));
 
 builder.Services.AddSqlServer<AuthDbContext>(builder.Configuration.GetConnectionString("sqlContainer"));
 

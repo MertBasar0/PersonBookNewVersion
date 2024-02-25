@@ -14,6 +14,7 @@ using System.Text;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Utilities.Dto;
 using Utilities.Dtos;
+using Utilities;
 
 namespace Business.Concrete
 {
@@ -21,11 +22,11 @@ namespace Business.Concrete
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private TokenOption _tokenOptions;
+        private CommonTokenOption _tokenOptions;
 
 
 
-        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IOptions<TokenOption> tokenOptions)
+        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IOptions<CommonTokenOption> tokenOptions)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -38,28 +39,29 @@ namespace Business.Concrete
             byte[] securityKey = Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey);
             if (user != null)
             {
-                //var canSignIn = await _signInManager.CanSignInAsync(user);
 
-                //if (canSignIn)
-                //{
-                    if(await _userManager.CheckPasswordAsync(user, authApiLoginRequestDto.Password))
-                    {
-                        var claims = await _userManager.GetClaimsAsync(user);
+                //var secureKey = new SymmetricSecurityKey(Convert.FromBase64String(_tokenOptions.SecurityKey));
+                //secureKey.KeyId = secureKey.KeySize.ToString();
+                if (await _userManager.CheckPasswordAsync(user, authApiLoginRequestDto.Password))
+                {
+                    var claims = await _userManager.GetClaimsAsync(user);
 
-                        var securityToken = new JwtSecurityToken(
-                            issuer: _tokenOptions.Issuer,
-                            audience: _tokenOptions.Audience,
-                            claims: claims,
-                            
-                            expires: DateTime.Now.AddDays(1),
-                            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(securityKey), SecurityAlgorithms.HmacSha256)
-                            );
+                    var securityToken = new JwtSecurityToken(
+                        issuer: _tokenOptions.Issuer,
+                        audience: _tokenOptions.Audiances,
+                        claims: claims,
+                        expires: DateTime.Now.AddDays(1),
+                        signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey)), SecurityAlgorithms.HmacSha256)
+                        );
 
-                        JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
-                        string token = jwtSecurityTokenHandler.WriteToken(securityToken);
-                        return AuthApiResponseGenericModel<JwtTokenDto>.Success(new JwtTokenDto(token, DateTime.UtcNow.AddDays(1).ToString()), System.Net.HttpStatusCode.OK);
-                    }
-                //}
+                    JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
+
+                    string token = jwtSecurityTokenHandler.WriteToken(securityToken);
+
+                    return AuthApiResponseGenericModel<JwtTokenDto>.Success(new JwtTokenDto(token, DateTime.UtcNow.AddDays(1).ToString()), System.Net.HttpStatusCode.OK);
+
+                }
+                
             }
             return AuthApiResponseGenericModel<JwtTokenDto>.Fail(ErrorDto.Create("Giriş işlemi başarısız", true), System.Net.HttpStatusCode.Unauthorized);
         }

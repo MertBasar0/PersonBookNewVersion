@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession();
+
 
 builder.Services.AddMvc(x =>
 {
@@ -29,19 +32,6 @@ builder.Services.AddMvc(x =>
     option.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
 });
 
-builder.Services.AddSession(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.IdleTimeout = TimeSpan.FromDays(1);
-});
-
-var tokenOpt = builder.Configuration.GetSection("JwtTokenInformation").Get<CommonTokenOption>();
-
-var s = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOpt.SecurityKey));
-
-var c = tokenOpt;
 
 builder.Services.AddAuthentication(option =>
 {
@@ -51,17 +41,31 @@ builder.Services.AddAuthentication(option =>
 })
 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, option =>
 {
+    var tokenOpt = builder.Configuration.GetSection("JwtTokenInformation").Get<CommonTokenOption>();
+
+    //var secureKey = new SymmetricSecurityKey(Convert.FromBase64String(tokenOpt.SecurityKey));
+    //secureKey.KeyId = secureKey.KeySize.ToString();
+
     option.TokenValidationParameters = new TokenValidationParameters()
     {
-        ValidIssuer = tokenOpt.Issuer,
+        ValidIssuer = tokenOpt.Issuer,                  
         ValidAudience = tokenOpt.Audiances,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOpt.SecurityKey)),
         ClockSkew = TimeSpan.Zero,
-        
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ValidateIssuerSigningKey = true
+        ValidateIssuerSigningKey = true,
+        
+        
+    };
+
+    option.Events = new JwtBearerEvents()
+    {
+        OnAuthenticationFailed = context =>
+        {
+            throw new InvalidOperationException(context.Exception.Message);
+        }
     };
 });
 
@@ -83,7 +87,6 @@ builder.Services.AddHttpClient(ClientConsts.AuthenticationServerName, x =>
 });
 
 var app = builder.Build();
-
 
 app.UseSession();
 
@@ -116,22 +119,26 @@ app.Use(async (context, next) =>
 
 app.UseRouting();
 
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
-{
+
+    {
+        endpoints.MapAreaControllerRoute(
+        name: "Main",
+        areaName: "Main",
+        pattern: "Per/{controller=Person}/{action=Index}"
+    );
+
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Account}/{action=Index}/{id?}"
     );
 
-    endpoints.MapAreaControllerRoute(
-        name: "Main",
-        areaName: "Main",
-        pattern: "Per/{controller=Person}/{action=Index}"
-    );
+
 
 });
 
