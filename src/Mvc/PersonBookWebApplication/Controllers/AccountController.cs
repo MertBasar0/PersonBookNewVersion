@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Business.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,10 +18,13 @@ namespace PersonBookWebApplication.Controllers
     {
         private readonly HttpClient _AuthenticationServerClient;
         private readonly IMapper _mapper;
-        public AccountController(IHttpClientFactory httpClientFactory, IMapper mapper)
+        private readonly IIdentityManager _ıdentityManager;
+
+        public AccountController(IHttpClientFactory httpClientFactory, IMapper mapper, IIdentityManager ıdentityManager)
         {
             _AuthenticationServerClient = httpClientFactory.CreateClient(ClientConsts.AuthenticationServerName);
             _mapper = mapper;
+            _ıdentityManager = ıdentityManager;
         }
 
 
@@ -31,7 +35,7 @@ namespace PersonBookWebApplication.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([FromBody]LoginViewModel loginModel)
         {
             if (!ModelState.IsValid)
@@ -53,6 +57,7 @@ namespace PersonBookWebApplication.Controllers
                     }
                     var securityKeyByteArray = Encoding.UTF8.GetBytes(readedResponse.Data?.AccessToken);
                     HttpContext.Session.Set("session", securityKeyByteArray);
+                    await _ıdentityManager.GetUserMail();
                 }
                 return RedirectToAction("Index", "Person", new { area = "Main" });
             }

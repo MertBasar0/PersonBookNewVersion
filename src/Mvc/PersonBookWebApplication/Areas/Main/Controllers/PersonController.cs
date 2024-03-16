@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PersonBookWebApplication.Areas.Controllers
+namespace PersonBookWebApplication.Areas.Main.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "admin")]
     [Area(areaName: "Main")]

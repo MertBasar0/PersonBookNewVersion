@@ -129,14 +129,14 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="register-form">
+        <form class="register-form" enctype="multipart/form-data">
             <input type="text" id="registerUserName" placeholder="isim" />
             <input type="password" id="registerPassword" placeholder="şifre" />
             <input type="text" id="registerMail" placeholder="mail" />
             <button type="button" id="registerButton">Kayıt Ol</button>
             <p class="message">Kayıtlı mısın ? <a href="#">Giriş Yap</a></p>
         </form>
-        <form class="login-form">
+        <form class="login-form" enctype="multipart/form-data">
             <input type="text" id="loginMail" asp-for="Mail" placeholder="mail" />
             <input type="password" id="loginPassword" asp-for="Password" placeholder="şifre" />
             <button type="button" id="loginButton">login</button>

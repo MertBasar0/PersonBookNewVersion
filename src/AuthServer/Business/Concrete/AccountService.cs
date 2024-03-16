@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Utilities.Dto;
 using Utilities.Dtos;
 using Utilities;
+using System.Text.Json;
 
 namespace Business.Concrete
 {
@@ -40,11 +41,11 @@ namespace Business.Concrete
             if (user != null)
             {
 
-                //var secureKey = new SymmetricSecurityKey(Convert.FromBase64String(_tokenOptions.SecurityKey));
-                //secureKey.KeyId = secureKey.KeySize.ToString();
                 if (await _userManager.CheckPasswordAsync(user, authApiLoginRequestDto.Password))
                 {
                     var claims = await _userManager.GetClaimsAsync(user);
+
+
 
                     var securityToken = new JwtSecurityToken(
                         issuer: _tokenOptions.Issuer,
@@ -54,9 +55,11 @@ namespace Business.Concrete
                         signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey)), SecurityAlgorithms.HmacSha256)
                         );
 
+
+
                     JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
 
-                    string token = jwtSecurityTokenHandler.WriteToken(securityToken);
+                    var token = jwtSecurityTokenHandler.WriteToken(securityToken);
 
                     return AuthApiResponseGenericModel<JwtTokenDto>.Success(new JwtTokenDto(token, DateTime.UtcNow.AddDays(1).ToString()), System.Net.HttpStatusCode.OK);
 

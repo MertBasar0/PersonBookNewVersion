@@ -1,3 +1,5 @@
+using Business.Abstraction;
+using Business.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +34,6 @@ builder.Services.AddMvc(x =>
     option.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
 });
 
-
 builder.Services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -57,7 +58,6 @@ builder.Services.AddAuthentication(option =>
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         
-        
     };
 
     option.Events = new JwtBearerEvents()
@@ -73,11 +73,14 @@ builder.Services.AddAuthorization(auth =>
 {
     auth.AddPolicy("admin", role =>
     {
-        role.RequireUserName("Mert");
+        role.RequireRole("admin");
     });
 });
 
+
+
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddScoped<IIdentityManager, IdentityManager>();
 
 builder.Services.AddHttpClient(ClientConsts.AuthenticationServerName, x =>
 {
@@ -110,10 +113,11 @@ app.Use(async (context, next) =>
         {
             string tokenString = Encoding.UTF8.GetString(token);
             context.Request.Headers["Authorization"] = "Bearer " + tokenString;
-
-            var s = context.Request.Headers.Authorization;
         }
     }
+
+
+
     await next();
 });
 
