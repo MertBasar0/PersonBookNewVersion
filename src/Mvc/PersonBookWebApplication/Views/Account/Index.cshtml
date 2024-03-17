@@ -1,8 +1,5 @@
 ﻿@model LoginViewModel
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 @section Css{
 
     <style type="text/css">
@@ -155,12 +152,16 @@
         var loginButton = document.getElementById('loginButton');
         loginButton.addEventListener('click', () => {
 
-            var loginInputs = {
-                "Mail": document.getElementById('loginMail').value,
-                "Password": document.getElementById('loginPassword').value
-            }
+            var mail = document.getElementById('loginMail').value;
+            var password = document.getElementById('loginPassword').value;
 
-            fetch("Account/Login", {
+            var loginInputs = {
+                'Mail': mail,
+                'Password': password
+            }
+            console.log(JSON.stringify(loginInputs));
+
+            fetch('/Account/Login', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -179,7 +180,7 @@
                 "Email": document.getElementById('registerMail').value
             }
             
-            fetch("Account/Register", {
+            fetch("/Account/Register", {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"

@@ -22,16 +22,16 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
 
-builder.Services.AddMvc(x =>
+builder.Services.AddMvc(options =>
 {
-    x.EnableEndpointRouting = true;
+    options.EnableEndpointRouting = true;
 })
-.AddRazorOptions(option =>
+.AddRazorOptions(options =>
 {
-    option.AreaViewLocationFormats.Clear();
-    option.AreaViewLocationFormats.Add("/Areas/{2}/Views/{1}/{0}.cshtml");
-    option.AreaViewLocationFormats.Add("/Areas/{2}/Views/Shared/{0}.cshtml");
-    option.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+    options.AreaViewLocationFormats.Clear();
+    options.AreaViewLocationFormats.Add("/Areas/{2}/Views/{1}/{0}.cshtml");
+    options.AreaViewLocationFormats.Add("/Areas/{2}/Views/Shared/{0}.cshtml");
+    options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
 });
 
 builder.Services.AddAuthentication(option =>
@@ -49,7 +49,7 @@ builder.Services.AddAuthentication(option =>
 
     option.TokenValidationParameters = new TokenValidationParameters()
     {
-        ValidIssuer = tokenOpt.Issuer,                  
+        ValidIssuer = tokenOpt.Issuer,
         ValidAudience = tokenOpt.Audiances,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOpt.SecurityKey)),
         ClockSkew = TimeSpan.Zero,
@@ -57,7 +57,7 @@ builder.Services.AddAuthentication(option =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        
+
     };
 
     option.Events = new JwtBearerEvents()
@@ -104,7 +104,7 @@ app.UseStaticFiles();
 
 app.Use(async (context, next) =>
 {
-    
+
     var authHeader = context.Request.Headers["Authorization"];
     if (authHeader.Count == 0)
     {
@@ -129,20 +129,24 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
+{
 
-    {
-        endpoints.MapAreaControllerRoute(
-        name: "Main",
-        areaName: "Main",
-        pattern: "Per/{controller=Person}/{action=Index}"
+
+    endpoints.MapAreaControllerRoute(
+    name: "Per",
+    areaName: "Per",
+    pattern: "main/{controller=person}/{action=index}"
     );
 
     endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Account}/{action=Index}/{id?}"
+    name: "default",
+    pattern: "{controller=Account}/{action=Index}/{id?}"
     );
 
-
+    //endpoints.MapControllerRoute(
+    //name: "default",
+    //pattern: "{controller=Home}/{action=Index}/{id?}"
+    //);
 
 });
 

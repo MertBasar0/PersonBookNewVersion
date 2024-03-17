@@ -2,15 +2,17 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PersonBookWebApplication.Areas.Main.Controllers
+namespace PersonBookWebApplication.Per.Main.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "admin")]
-    [Area(areaName: "Main")]
+    [Area("Per")]
     public class PersonController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
+
     }
 }

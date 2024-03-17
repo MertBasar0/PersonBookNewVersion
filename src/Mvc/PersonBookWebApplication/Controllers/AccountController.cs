@@ -35,7 +35,7 @@ namespace PersonBookWebApplication.Controllers
         }
 
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> Login([FromBody]LoginViewModel loginModel)
         {
             if (!ModelState.IsValid)
@@ -43,29 +43,23 @@ namespace PersonBookWebApplication.Controllers
                 return View("Index", loginModel);
             }
             var loginDto = _mapper.Map<AuthApiLoginRequestDto>(loginModel);
-            try
-            {
+
                 var requestResponse = await _AuthenticationServerClient.PostAsJsonAsync<AuthApiLoginRequestDto>(ClientConsts.AuthenticationServerLogin, loginDto);
                 if (requestResponse.IsSuccessStatusCode)
                 {
-                    var readedResponse = await requestResponse.Content.ReadFromJsonAsync<AuthApiResponseGenericModel<JwtTokenDto>>();
+                    var readedResponse = await requestResponse.Content. ReadFromJsonAsync<AuthApiResponseGenericModel<JwtTokenDto>>();
                     //AuthApiResponseGenericModel<JwtTokenDto> deserializedResponse = JsonConvert.DeserializeObject<AuthApiResponseGenericModel<JwtTokenDto>>(readedResponse);
                     if (readedResponse == null || !readedResponse.IsSuccess)
                     {
                         TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
                         return View("Index");
                     }
-                    var securityKeyByteArray = Encoding.UTF8.GetBytes(readedResponse.Data?.AccessToken);
-                    HttpContext.Session.Set("session", securityKeyByteArray);
-                    await _ıdentityManager.GetUserMail();
+                    var securityKeyByteArray = await Task.Run(() => Encoding.UTF8.GetBytes(readedResponse.Data?.AccessToken));
+                    await Task.Run(() => HttpContext.Session.Set("session", securityKeyByteArray));
+                     //_ıdentityManager.GetUserMail();
                 }
-                return RedirectToAction("Index", "Person", new { area = "Main" });
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
+                return RedirectToAction("index", "person", new { area = "Per" });
+            
         }
 
         [HttpPost]
