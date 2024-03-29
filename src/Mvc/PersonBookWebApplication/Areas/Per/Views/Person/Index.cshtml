@@ -1,4 +1,6 @@
-﻿
+﻿@using PersonBookWebApplication.Areas.Per.Models;
+@model PersonViewModel;
+
 @section Css {
 
     <style type="text/css">
@@ -210,44 +212,32 @@
     </style>
 }
 
-@{
-    string successMessage = TempData["successMessage"] as String;
-    string badRequestMessage = TempData["badRequestMessage"] as String;
-    if (successMessage != null)
-    {
-        <h1>@successMessage</h1>
-    }
-    if (badRequestMessage != null)
-    {
-        <h1>@badRequestMessage</h1>
-    }
-}
 
-<form>
-    <input id="input-1" type="text" placeholder="Mert" required />
+<form asp-controller="person" asp-action="index" method="post">
+    <input id="input-1" type="text" asp-for ="Name"  placeholder="Mert" required />
     <label for="input-1">
         <span class="label-text">isim</span>
         <span class="nav-dot"></span>
         <div class="signup-button-trigger">Sign Up</div>
     </label>
-    <input id="input-2" type="text" placeholder="Koltigin" required />
+    <input id="input-2" asp-for="Surname" type="text" placeholder="Koltigin" required />
     <label for="input-2">
         <span class="label-text">kullanici adi</span>
         <span class="nav-dot"></span>
     </label>
-    <input id="input-3" type="email" placeholder="email@addres.com" required />
+    <input id="input-3" asp-for="No" type="email" placeholder="email@addres.com" required />
     <label for="input-3">
         <span class="label-text">email</span>
         <span class="nav-dot"></span>
     </label>
-    <input id="input-4" type="text" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required />
-    <label for="input-4">
-        <span class="label-text">Şifre</span>
+    <input id="input-3" asp-for="Gender" type="email" placeholder="email@addres.com" required />
+    <label for="input-3">
+        <span class="label-text">email</span>
         <span class="nav-dot"></span>
     </label>
-    <input id="input-5" type="text" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required />
-    <label for="input-5">
-        <span class="label-text">Şifre(Tekrar)</span>
+    <input id="input-3" asp-for="OpenAddress" type="email" placeholder="email@addres.com" required />
+    <label for="input-3">
+        <span class="label-text">email</span>
         <span class="nav-dot"></span>
     </label>
     <button type="submit">Kaydet</button>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Abstraction
 {
-    public interface IIdentityManager
+    public interface IIdentityService
     {
         Task<String> GetUserMail();
     }

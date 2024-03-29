@@ -1,4 +1,4 @@
-﻿using Entities.Concrete.Enums;
+﻿using Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,11 +20,9 @@ namespace Entities.Concrete.Person.Private
         {
         }
 
-        public PrivateData(Gender gender, int personId, Person personData)
+        public PrivateData(Gender gender)
         {
             Gender = gender;
-            PersonId = personId;
-            PersonData = personData;
         }
     }
 }

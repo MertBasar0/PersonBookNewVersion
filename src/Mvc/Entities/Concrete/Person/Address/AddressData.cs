@@ -20,11 +20,9 @@ namespace Entities.Concrete.Person.Address
         {
         }
 
-        public AddressData(string openAddress, int personId, Person person)
+        public AddressData(string openAddress)
         {
             OpenAddress = openAddress;
-            PersonId = personId;
-            PersonData = person;
         }
     }
 }

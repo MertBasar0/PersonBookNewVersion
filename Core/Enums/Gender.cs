@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Concrete.Enums
+namespace Core.Enums
 {
     public enum Gender
     {
-        Male,
-        Famele
+        Male = 0,
+        Famele = 1
     }
 }

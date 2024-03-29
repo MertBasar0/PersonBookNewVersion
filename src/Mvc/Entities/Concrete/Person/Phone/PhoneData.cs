@@ -20,11 +20,9 @@ namespace Entities.Concrete.Person.Phone
         {
         }
 
-        public PhoneData(string no, int personId, Person personData)
+        public PhoneData(string no)
         {
             No = no;
-            PersonId = personId;
-            PersonData = personData;
         }
     }
 }

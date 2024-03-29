@@ -9,19 +9,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthServer", "AuthServer", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mvc", "Mvc", "{5F61DEEA-FFD8-40F1-A147-9E3C9D5CC41D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "src\AuthServer\Entities\Entities.csproj", "{4BFD7EA5-6D78-4B5B-97EF-ACF3DC572363}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.Entities", "src\AuthServer\Entities\AuthServer.Entities.csproj", "{4BFD7EA5-6D78-4B5B-97EF-ACF3DC572363}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "src\AuthServer\DataAccess\DataAccess.csproj", "{F558725D-DA88-419E-ABF3-3EC01B72732D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.DataAccess", "src\AuthServer\DataAccess\AuthServer.DataAccess.csproj", "{F558725D-DA88-419E-ABF3-3EC01B72732D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "src\AuthServer\Business\Business.csproj", "{CBDD9A1D-B76C-4852-A57E-8FCBA699A6CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.Business", "src\AuthServer\Business\AuthServer.Business.csproj", "{CBDD9A1D-B76C-4852-A57E-8FCBA699A6CA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationServer", "src\AuthServer\AuthenticationServer\AuthenticationServer.csproj", "{2B52511F-3DA6-44B8-A31C-C603307821CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "src\Mvc\Entities\Entities.csproj", "{A1A93697-0919-4AAF-95B7-ADBAC88AAD92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvc.Entities", "src\Mvc\Entities\Mvc.Entities.csproj", "{A1A93697-0919-4AAF-95B7-ADBAC88AAD92}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "src\Mvc\DataAccess\DataAccess.csproj", "{71E481AF-6DD2-44B7-B236-290E2FD4AAD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvc.DataAccess", "src\Mvc\DataAccess\Mvc.DataAccess.csproj", "{71E481AF-6DD2-44B7-B236-290E2FD4AAD4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "src\Mvc\Business\Business.csproj", "{F2ABD091-38CB-4580-B9CB-3978BC0BB7CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mvc.Business", "src\Mvc\Business\Mvc.Business.csproj", "{F2ABD091-38CB-4580-B9CB-3978BC0BB7CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersonBookWebApplication", "src\Mvc\PersonBookWebApplication\PersonBookWebApplication.csproj", "{202E7958-DB25-4B5B-B82A-98977E78B00D}"
 EndProject
@@ -30,6 +30,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "src\BuildingBlocks\Utilities\Utilities.csproj", "{F6BC62DE-1C54-48FE-B3F1-305F16D92A8D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.Core", "AuthServer.Core\AuthServer.Core.csproj", "{35ED0D56-728A-4822-98F3-BCEAD470DC37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvc.Core", "Core\Mvc.Core.csproj", "{03DD0CF6-5588-4E3D-8873-1BD818DA8425}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,10 @@ Global
 		{35ED0D56-728A-4822-98F3-BCEAD470DC37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35ED0D56-728A-4822-98F3-BCEAD470DC37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35ED0D56-728A-4822-98F3-BCEAD470DC37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03DD0CF6-5588-4E3D-8873-1BD818DA8425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03DD0CF6-5588-4E3D-8873-1BD818DA8425}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03DD0CF6-5588-4E3D-8873-1BD818DA8425}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03DD0CF6-5588-4E3D-8873-1BD818DA8425}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{F6A00E93-23C0-485B-B815-76882E5D3E9E} = {1F573860-EFDC-4E19-95C2-5B6057A0FBF3}
 		{F6BC62DE-1C54-48FE-B3F1-305F16D92A8D} = {F6A00E93-23C0-485B-B815-76882E5D3E9E}
 		{35ED0D56-728A-4822-98F3-BCEAD470DC37} = {3A36E4AE-6D46-4283-AA19-69D588D4D156}
+		{03DD0CF6-5588-4E3D-8873-1BD818DA8425} = {5F61DEEA-FFD8-40F1-A147-9E3C9D5CC41D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F0ED3097-1298-4750-AF2B-A7D7EB626A60}

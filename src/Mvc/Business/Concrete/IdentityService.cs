@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class IdentityManager : IIdentityManager
+    public class IdentityService : IIdentityService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public IdentityManager(IHttpContextAccessor httpContextAccessor)
+        public IdentityService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public Task<string> GetUserMail()
+        public async Task<string> GetUserMail()
         {
-            var claims = _httpContextAccessor.HttpContext.User;
+            var user = _httpContextAccessor.HttpContext.User;
+            var name = user.Identity?.Name;
 
-
-            return Task.FromResult(string.Empty);
+            return await Task.FromResult(name);
         }
     }
 }

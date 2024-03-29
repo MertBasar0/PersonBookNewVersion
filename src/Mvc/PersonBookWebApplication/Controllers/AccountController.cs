@@ -18,9 +18,9 @@ namespace PersonBookWebApplication.Controllers
     {
         private readonly HttpClient _AuthenticationServerClient;
         private readonly IMapper _mapper;
-        private readonly IIdentityManager _ıdentityManager;
+        private readonly IIdentityService _ıdentityManager;
 
-        public AccountController(IHttpClientFactory httpClientFactory, IMapper mapper, IIdentityManager ıdentityManager)
+        public AccountController(IHttpClientFactory httpClientFactory, IMapper mapper, IIdentityService ıdentityManager)
         {
             _AuthenticationServerClient = httpClientFactory.CreateClient(ClientConsts.AuthenticationServerName);
             _mapper = mapper;

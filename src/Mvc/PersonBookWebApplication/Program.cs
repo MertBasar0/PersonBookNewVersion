@@ -1,11 +1,16 @@
 using Business.Abstraction;
 using Business.Concrete;
+using DataAccess;
+using DataAccess.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Mvc.Business.Abstraction;
+using Mvc.Business.Concrete;
 using PersonBookWebApplication.Consts;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -80,13 +85,20 @@ builder.Services.AddAuthorization(auth =>
 
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddScoped<IIdentityManager, IdentityManager>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IPersonAppService, PersonAppService>();
 
 builder.Services.AddHttpClient(ClientConsts.AuthenticationServerName, x =>
 {
     x.BaseAddress = new Uri(ClientConsts.AuthenticationServerBaseAddress);
     x.DefaultRequestHeaders.Accept.Clear();
     x.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+});
+
+builder.Services.AddDbContextPool<PersonAppDbContext>(x =>
+{
+    x.UseSqlServer(builder.Configuration.GetConnectionString("sqlContainer"));
 });
 
 var app = builder.Build();
