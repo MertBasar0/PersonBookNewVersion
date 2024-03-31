@@ -64,14 +64,29 @@ builder.Services.AddAuthentication(option =>
         ValidateIssuerSigningKey = true,
 
     };
-
-    option.Events = new JwtBearerEvents()
-    {
-        OnAuthenticationFailed = context =>
-        {
-            throw new InvalidOperationException(context.Exception.Message);
-        }
-    };
+    //option.Events = new JwtBearerEvents()
+    //{
+    //    OnAuthenticationFailed = (context) =>
+    //    {
+    //        var statusCode = context.Response.StatusCode;
+    //        if(statusCode == 401)
+    //            context.Response.Redirect("http://localhost:5020");
+    //        return Task.CompletedTask;
+    //    },
+    //    OnForbidden = (context) =>
+    //    {
+    //        context.Response.Redirect("/");
+    //        return Task.CompletedTask;
+    //    },
+    //    OnChallenge = (context) =>
+    //    {
+    //        if(context.Error == "invalid_token")
+    //             return Task.FromResult(() => context.Response.Redirect("http://localhost:5020/")); 
+    //        else
+    //            return Task.CompletedTask;
+        
+    //    }
+    //};
 });
 
 builder.Services.AddAuthorization(auth =>
