@@ -143,7 +143,6 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
 
-
     endpoints.MapAreaControllerRoute(
     name: "Per",
     areaName: "Per",
@@ -154,11 +153,6 @@ app.UseEndpoints(endpoints =>
     name: "default",
     pattern: "{controller=Account}/{action=Index}/{id?}"
     );
-
-    //endpoints.MapControllerRoute(
-    //name: "default",
-    //pattern: "{controller=Home}/{action=Index}/{id?}"
-    //);
 
 });
 
