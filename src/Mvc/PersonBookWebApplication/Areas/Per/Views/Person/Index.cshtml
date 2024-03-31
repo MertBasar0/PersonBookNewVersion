@@ -148,6 +148,7 @@
             padding: 0.625rem 1.25rem 0.625rem 0.625rem;
             top: 52%;
             right: 1.25rem;
+            font-size: 25px;
         }
 
             .nav-dot:before {
@@ -187,9 +188,6 @@
             margin-top: -50px;
         }
 
-        label[for=input-5] .nav-dot {
-            margin-top: -25px;
-        }
 
         * {
             margin: 0;
@@ -213,30 +211,37 @@
 }
 
 
-<form asp-controller="person" asp-action="index" method="post">
+<form asp-controller="person" asp-action="index" id="form" method="post">
     <input id="input-1" type="text" asp-for ="Name"  placeholder="Mert" required />
     <label for="input-1">
         <span class="label-text">İsim</span>
-        <span class="nav-dot"></span>
+        <span class="nav-dot" asp-validation-for="Name"></span>
         <div class="signup-button-trigger">Kayıt Ol</div>
     </label>
     <input id="input-2" asp-for="Surname" type="text" placeholder="Koltigin" required />
     <label for="input-2">
         <span class="label-text">Soyisim</span>
-        <span class="nav-dot"></span>
+        <span class="nav-dot" asp-validation-for="Surname"></span>
     </label>
     <input id="input-3" asp-for="No" type="tel" placeholder="5xx-xxx-xx-xx" required />
     <label for="input-3">
         <span class="label-text">Telefon</span>
-        <span class="nav-dot"></span>
+        <span class="nav-dot" asp-validation-for="No"></span>
     </label>
 
-    <input id="input-3" asp-for="OpenAddress" type="text" required />
-    <label for="input-3">
+    <input id="input-4" asp-for="OpenAddress" type="text" placeholder="hüseyin ağa sk. Beyoğlu/İstanbul" required />
+    <label for="input-4">
         <span class="label-text">Adres</span>
-        <span class="nav-dot"></span>
+        <span class="nav-dot" asp-validation-for="OpenAddress"></span>
     </label>
     <button type="submit">Kaydet</button>
     <p class="tip">Tab Tuşuna Basın</p>
     <div class="signup-button">Kişi Ekle</div>
 </form>
+
+@section Scripts{
+    <script type="text/javascript">
+
+
+    </script>
+}

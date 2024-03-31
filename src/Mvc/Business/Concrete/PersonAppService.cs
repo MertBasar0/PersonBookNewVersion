@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Core.Dtos;
+﻿using Core.Dtos;
 using DataAccess.UnitOfWork;
 using Entities.Concrete.Person;
 using Entities.Concrete.Person.Address;
@@ -29,7 +28,7 @@ namespace Mvc.Business.Concrete
         {
             try
             {
-                using (await _unitOfWork.BeginAsync())
+                using(await _unitOfWork.BeginAsync())
                 {
                     var personRepo = await _unitOfWork.GetGenRepositoryAsync<Person>();
 
@@ -42,7 +41,6 @@ namespace Mvc.Business.Concrete
                         Phone = new PhoneData(no: person.No)
                     });
                     await _unitOfWork.CommitAsync();
-
                 }
             }
             catch (Exception)
@@ -50,9 +48,6 @@ namespace Mvc.Business.Concrete
                 await _unitOfWork.RollBackAsync();
                 throw;
             }
-
-
-            _unitOfWork.Dispose();
         }
     }
 }

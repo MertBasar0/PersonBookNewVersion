@@ -38,7 +38,6 @@ namespace DataAccess.UnitOfWork
             catch (Exception e)
             {
                 await _fakadeDb.RollbackTransactionAsync();
-                Dispose();
                 throw new Exception(e.Message);
             }
         }

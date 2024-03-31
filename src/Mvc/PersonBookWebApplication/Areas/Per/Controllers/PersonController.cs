@@ -35,9 +35,9 @@ namespace PersonBookWebApplication.Per.Main.Controllers
             {
                 var personDto = _mapper.Map<PersonViewModel, PersonDto>(personModel);
                 await _personAppService.CreatePersonAsync(personDto);
-                return await Task.FromResult(View(personDto));
+                return await Task.FromResult(RedirectToAction("Index"));
             }
-            return await Task.FromResult(View());
+            return await Task.FromResult(View(personModel));
         }
     }
 }

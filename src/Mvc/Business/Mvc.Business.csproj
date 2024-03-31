@@ -9,9 +9,11 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.26" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Mvc.Core.csproj" />
     <ProjectReference Include="..\DataAccess\Mvc.DataAccess.csproj" />
     <ProjectReference Include="..\Entities\Mvc.Entities.csproj" />
   </ItemGroup>
