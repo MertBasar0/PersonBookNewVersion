@@ -1,4 +1,5 @@
 ﻿using DataAccess.Repositories.Generics;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,9 @@ namespace DataAccess.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        Task Commit();
-        Task RollBack();
-        Task<IGenRepository<T>> GetGenRepository<T>() where T : class;
+        Task<IDbContextTransaction> BeginAsync();
+        Task CommitAsync();
+        Task RollBackAsync();
+        Task<IGenRepository<T>> GetGenRepositoryAsync<T>() where T : class;
     }
 }

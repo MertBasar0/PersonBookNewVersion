@@ -25,30 +25,34 @@ namespace Mvc.Business.Concrete
         }
 
 
-        public async Task CreatePerson(PersonDto person)
+        public async Task CreatePersonAsync(PersonDto person)
         {
-
-            var personRepo = await _unitOfWork.GetGenRepository<Person>();
             try
             {
-                await personRepo.AddAsync(new Person()
+                using (await _unitOfWork.BeginAsync())
                 {
-                    Name = person.Name,
-                    Surname = person.Surname,
-                    Address = new AddressData(openAddress: person.OpenAddress),
-                    Private = new PrivateData(gender: person.Gender),
-                    Phone = new PhoneData(no: person.No)
-                });
+                    var personRepo = await _unitOfWork.GetGenRepositoryAsync<Person>();
 
-            await _unitOfWork.Commit();
+                    await personRepo.AddAsync(new Person()
+                    {
+                        Name = person.Name,
+                        Surname = person.Surname,
+                        Address = new AddressData(openAddress: person.OpenAddress),
+                        Private = new PrivateData(gender: person.Gender),
+                        Phone = new PhoneData(no: person.No)
+                    });
+                    await _unitOfWork.CommitAsync();
+
+                }
             }
             catch (Exception)
             {
-                await _unitOfWork.RollBack();       
+                await _unitOfWork.RollBackAsync();
+                throw;
             }
 
-            _unitOfWork.Dispose();
 
+            _unitOfWork.Dispose();
         }
     }
 }

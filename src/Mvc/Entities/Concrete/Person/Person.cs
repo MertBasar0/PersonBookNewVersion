@@ -17,16 +17,16 @@ namespace Entities.Concrete.Person
 
         public String Surname { get; set; }
 
-        [ForeignKey(nameof(AddressData))]
-        public int? AddressId { get; set; }
+        //[ForeignKey(nameof(AddressData))]
+        //public int? AddressId { get; set; }
         public virtual AddressData? Address { get; set; }
 
-        [ForeignKey(nameof(PhoneData))]
-        public int? PhoneId { get; set; }
+        //[ForeignKey(nameof(PhoneData))]
+        //public int? PhoneId { get; set; }
         public virtual PhoneData? Phone { get; set; }
 
-        [ForeignKey(nameof(PrivateData))]
-        public int? PrivateId { get; set; }
+        //[ForeignKey(nameof(PrivateData))]
+        //public int? PrivateId { get; set; }
         public virtual PrivateData? Private { get; set; }
 
     }

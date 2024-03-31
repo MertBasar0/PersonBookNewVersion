@@ -86,8 +86,8 @@ builder.Services.AddAuthorization(auth =>
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IIdentityService, IdentityService>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPersonAppService, PersonAppService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddHttpClient(ClientConsts.AuthenticationServerName, x =>
 {

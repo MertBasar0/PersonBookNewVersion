@@ -84,10 +84,9 @@ namespace Business.Concrete
                     await _userManager.AddClaimsAsync(createdUser, new List<Claim>() { new Claim(ClaimTypes.Name, authApiRegisterRequestDto.Username), new Claim(ClaimTypes.Email, authApiRegisterRequestDto.Email), new Claim(ClaimTypes.Role, "admin")} );
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw new Exception(ex.Message);
             }
             if (result.Succeeded)
                 return AuthApiResponseGenericModel<NoDataDto>.Success(new NoDataDto(), System.Net.HttpStatusCode.OK);

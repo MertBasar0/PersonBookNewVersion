@@ -168,6 +168,12 @@
                 },
                 body: JSON.stringify(loginInputs)
             })
+                .then(response => {
+                    var result = response.json();
+                    if (result) {
+                        window.location.href = "http://localhost:5020/main";
+                    }
+                })
         });
 
         var registerButton = document.getElementById('registerButton');

@@ -30,9 +30,14 @@ namespace PersonBookWebApplication.Per.Main.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(PersonViewModel personModel)
         {
-            var personDto = _mapper.Map<PersonViewModel, PersonDto>(personModel);
-            await _personAppService.CreatePerson(personDto);
-            return await Task.FromResult(View(personDto));
+            personModel.Gender = Core.Enums.Gender.Unknown;
+            if (ModelState.IsValid)
+            {
+                var personDto = _mapper.Map<PersonViewModel, PersonDto>(personModel);
+                await _personAppService.CreatePersonAsync(personDto);
+                return await Task.FromResult(View(personDto));
+            }
+            return await Task.FromResult(View());
         }
     }
 }

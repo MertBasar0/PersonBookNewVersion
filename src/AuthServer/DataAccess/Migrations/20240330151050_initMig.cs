@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DataAccess.Migrations
+namespace AuthServer.DataAccess.Migrations
 {
-    public partial class InitMig : Migration
+    public partial class initMig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,10 +28,10 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    createTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    deleteTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    status = table.Column<int>(type: "int", nullable: false),
+                    createTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    deleteTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    updateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    status = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

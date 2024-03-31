@@ -44,22 +44,20 @@ namespace PersonBookWebApplication.Controllers
             }
             var loginDto = _mapper.Map<AuthApiLoginRequestDto>(loginModel);
 
-                var requestResponse = await _AuthenticationServerClient.PostAsJsonAsync<AuthApiLoginRequestDto>(ClientConsts.AuthenticationServerLogin, loginDto);
-                if (requestResponse.IsSuccessStatusCode)
+            var requestResponse = await _AuthenticationServerClient.PostAsJsonAsync<AuthApiLoginRequestDto>(ClientConsts.AuthenticationServerLogin, loginDto);
+            if (requestResponse.IsSuccessStatusCode)
+            {
+                var readedResponse = await requestResponse.Content. ReadFromJsonAsync<AuthApiResponseGenericModel<JwtTokenDto>>();
+                if (readedResponse == null || !readedResponse.IsSuccess)
                 {
-                    var readedResponse = await requestResponse.Content. ReadFromJsonAsync<AuthApiResponseGenericModel<JwtTokenDto>>();
-                    //AuthApiResponseGenericModel<JwtTokenDto> deserializedResponse = JsonConvert.DeserializeObject<AuthApiResponseGenericModel<JwtTokenDto>>(readedResponse);
-                    if (readedResponse == null || !readedResponse.IsSuccess)
-                    {
-                        TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
-                        return View("Index");
-                    }
-                    var securityKeyByteArray = await Task.Run(() => Encoding.UTF8.GetBytes(readedResponse.Data?.AccessToken));
-                    await Task.Run(() => HttpContext.Session.Set("session", securityKeyByteArray));
-                     //_ıdentityManager.GetUserMail();
+                    TempData["badRequestMessage"] = "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.";
+                    return View("Index");
                 }
-                return RedirectToAction("index", "person", new { area = "Per" });
-            
+                var securityKeyByteArray = await Task.Run(() => Encoding.UTF8.GetBytes(readedResponse.Data?.AccessToken));
+                await Task.Run(() => HttpContext.Session.Set("session", securityKeyByteArray));
+                return Json(new { isOk = readedResponse.IsSuccess });
+            }
+            return Json(new { isOk = false });
         }
 
         [HttpPost]

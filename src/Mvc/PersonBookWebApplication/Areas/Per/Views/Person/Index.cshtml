@@ -216,28 +216,24 @@
 <form asp-controller="person" asp-action="index" method="post">
     <input id="input-1" type="text" asp-for ="Name"  placeholder="Mert" required />
     <label for="input-1">
-        <span class="label-text">isim</span>
+        <span class="label-text">İsim</span>
         <span class="nav-dot"></span>
-        <div class="signup-button-trigger">Sign Up</div>
+        <div class="signup-button-trigger">Kayıt Ol</div>
     </label>
     <input id="input-2" asp-for="Surname" type="text" placeholder="Koltigin" required />
     <label for="input-2">
-        <span class="label-text">kullanici adi</span>
+        <span class="label-text">Soyisim</span>
         <span class="nav-dot"></span>
     </label>
-    <input id="input-3" asp-for="No" type="email" placeholder="email@addres.com" required />
+    <input id="input-3" asp-for="No" type="tel" placeholder="5xx-xxx-xx-xx" required />
     <label for="input-3">
-        <span class="label-text">email</span>
+        <span class="label-text">Telefon</span>
         <span class="nav-dot"></span>
     </label>
-    <input id="input-3" asp-for="Gender" type="email" placeholder="email@addres.com" required />
+
+    <input id="input-3" asp-for="OpenAddress" type="text" required />
     <label for="input-3">
-        <span class="label-text">email</span>
-        <span class="nav-dot"></span>
-    </label>
-    <input id="input-3" asp-for="OpenAddress" type="email" placeholder="email@addres.com" required />
-    <label for="input-3">
-        <span class="label-text">email</span>
+        <span class="label-text">Adres</span>
         <span class="nav-dot"></span>
     </label>
     <button type="submit">Kaydet</button>

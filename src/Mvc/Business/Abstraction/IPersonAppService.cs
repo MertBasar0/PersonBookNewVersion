@@ -10,6 +10,6 @@ namespace Mvc.Business.Abstraction
 {
     public interface IPersonAppService
     {
-        Task CreatePerson(PersonDto person);
+        Task CreatePersonAsync(PersonDto person);
     }
 }

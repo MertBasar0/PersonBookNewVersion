@@ -9,6 +9,7 @@ namespace Core.Enums
     public enum Gender
     {
         Male = 0,
-        Famele = 1
+        Famele = 1,
+        Unknown = 2
     }
 }
