@@ -13,14 +13,14 @@ namespace Entities.Concrete.Person.Phone
 
         [ForeignKey(nameof(Person))]
         public int PersonId { get; set; }
-        public Person PersonData { get; set; }
+        public Person? PersonData { get; set; }
 
 
         public PhoneData()
         {
         }
 
-        public PhoneData(string no,Person person)
+        public PhoneData(string no,Person person = null)
         {
             No = no;
             PersonData = person;

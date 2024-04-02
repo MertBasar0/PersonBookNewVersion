@@ -13,14 +13,14 @@ namespace Entities.Concrete.Person.Address
 
         [ForeignKey(nameof(Person))]
         public int PersonId { get; set; }
-        public Person PersonData { get; set; }
+        public Person? PersonData { get; set; }
 
 
         public AddressData()
         {
         }
 
-        public AddressData(string openAddress, Person person)
+        public AddressData(string openAddress, Person person = null)
         {
             OpenAddress = openAddress;
             PersonData = person;

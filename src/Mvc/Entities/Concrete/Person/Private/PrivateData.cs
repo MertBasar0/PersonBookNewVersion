@@ -14,13 +14,13 @@ namespace Entities.Concrete.Person.Private
 
         [ForeignKey(nameof(Person))]
         public int PersonId { get; set; }
-        public Person PersonData { get; set; }
+        public Person? PersonData { get; set; }
 
         public PrivateData()
         {
         }
 
-        public PrivateData(Gender gender,Person person)
+        public PrivateData(Gender gender,Person person = null)
         {
             Gender = gender;
             PersonData = person;
