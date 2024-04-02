@@ -1,4 +1,7 @@
 ﻿using Entities.Concrete.Person;
+using Entities.Concrete.Person.Address;
+using Entities.Concrete.Person.Phone;
+using Entities.Concrete.Person.Private;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,5 +18,8 @@ namespace DataAccess
 
 
         public DbSet<Person> Persons { get; set; }
+        public DbSet<AddressData> AddressData { get; set; }
+        public DbSet<PrivateData> PrivateData { get; set; }
+        public DbSet<PhoneData> PhoneData { get; set; }
     }
 }

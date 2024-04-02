@@ -20,9 +20,10 @@ namespace Entities.Concrete.Person.Phone
         {
         }
 
-        public PhoneData(string no)
+        public PhoneData(string no,Person person)
         {
             No = no;
+            PersonData = person;
         }
     }
 }

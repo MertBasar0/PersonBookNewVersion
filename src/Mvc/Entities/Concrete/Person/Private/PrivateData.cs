@@ -20,9 +20,10 @@ namespace Entities.Concrete.Person.Private
         {
         }
 
-        public PrivateData(Gender gender)
+        public PrivateData(Gender gender,Person person)
         {
             Gender = gender;
+            PersonData = person;
         }
     }
 }

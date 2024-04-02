@@ -18,9 +18,10 @@ namespace DataAccess.Repositories.Generics
             _dbSet = _context.Set<TEntity>();
         }
 
-        public async Task AddAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            await _context.AddAsync(entity);
+            var entityEntry =  await _context.AddAsync(entity);
+            return await Task.FromResult(entityEntry.Entity);
         }
 
         public Task DeleteAsync(TEntity entity)

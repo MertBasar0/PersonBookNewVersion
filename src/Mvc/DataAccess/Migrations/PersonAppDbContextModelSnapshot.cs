@@ -41,7 +41,7 @@ namespace Mvc.DataAccess.Migrations
                     b.HasIndex("PersonId")
                         .IsUnique();
 
-                    b.ToTable("AddressData");
+                    b.ToTable("AddressData", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concrete.Person.Person", b =>
@@ -62,7 +62,7 @@ namespace Mvc.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Persons");
+                    b.ToTable("Persons", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concrete.Person.Phone.PhoneData", b =>
@@ -85,7 +85,7 @@ namespace Mvc.DataAccess.Migrations
                     b.HasIndex("PersonId")
                         .IsUnique();
 
-                    b.ToTable("PhoneData");
+                    b.ToTable("PhoneData", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concrete.Person.Private.PrivateData", b =>
@@ -107,7 +107,7 @@ namespace Mvc.DataAccess.Migrations
                     b.HasIndex("PersonId")
                         .IsUnique();
 
-                    b.ToTable("PrivateData");
+                    b.ToTable("PrivateData", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concrete.Person.Address.AddressData", b =>

@@ -31,15 +31,22 @@ namespace Mvc.Business.Concrete
                 using(await _unitOfWork.BeginAsync())
                 {
                     var personRepo = await _unitOfWork.GetGenRepositoryAsync<Person>();
+                    var privateDataRepo = await _unitOfWork.GetGenRepositoryAsync<PrivateData>();
+                    var phoneDataRepo = await _unitOfWork.GetGenRepositoryAsync<PhoneData>();
+                    var addressDataRepo = await _unitOfWork.GetGenRepositoryAsync<AddressData>();
 
-                    await personRepo.AddAsync(new Person()
+                    var personData = await personRepo.AddAsync(new Person()
                     {
                         Name = person.Name,
-                        Surname = person.Surname,
-                        Address = new AddressData(openAddress: person.OpenAddress),
-                        Private = new PrivateData(gender: person.Gender),
-                        Phone = new PhoneData(no: person.No)
+                        Surname = person.Surname
                     });
+
+
+                    var privateData = await privateDataRepo.AddAsync(new PrivateData(gender: Core.Enums.Gender.Male, personData));
+                    var phoneData = await phoneDataRepo.AddAsync(new PhoneData(no: person.No, personData));
+                    var AddressData = await addressDataRepo.AddAsync(new AddressData(openAddress: person.OpenAddress, personData));
+
+
                     await _unitOfWork.CommitAsync();
                 }
             }
